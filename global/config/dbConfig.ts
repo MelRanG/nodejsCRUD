@@ -9,16 +9,27 @@ const options: ConnectionOptions = {
     database: ":memory:",
     entities: [User, Article, Picture],
     synchronize: true,
-    logging: true
+    logging: false
 }
 
 const create = async () => {
     return await createConnection(options)
 }
+
 const close = async () => {
     await getConnection().close()
 }
 
+const clear = async () => {
+  const connection = getConnection()
+  const entities = connection.entityMetadatas
+
+  entities.forEach(async (entity) => {
+    const repository = connection.getRepository(entity.name)
+    await repository.query(`DELETE FROM ${entity.tableName}`)
+  })
+}
+
 create()
 // const connection = await createConnection(options)
-export {create, close}
+export {create, close, clear}
