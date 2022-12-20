@@ -8,7 +8,6 @@ export class Article {
     article_id!: number
   @Column()
     content?: string
-//   @ManyToOne((type) => User, (user:User) => user.article)
     @ManyToOne(() => User)
     @JoinColumn({name: 'user_id'})
     user!:User

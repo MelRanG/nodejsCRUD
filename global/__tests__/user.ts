@@ -25,6 +25,9 @@ const createUser = {
 const createArticle = {
     content : "컨텐츠"
 }
+const createPicture = {
+    content : "사진"
+}
 
 describe('user', () => {
     test('유저 create', async () => {
@@ -62,39 +65,20 @@ describe('user', () => {
 })
 
 describe('content', () => {
-    test('게시글 create', async () => {
+    test('사진 create', async () => {
         await request(app).post("/users").send(createUser)
-        const res = await request(app).post("/users/1/articles").send(createArticle).expect(200)
-        expect(res.body.content).toEqual(createArticle.content)
+        await request(app).post("/users/1/articles").send(createArticle)
+
+        const res = await request(app).post("/users/1/articles/1/pictures").send(createPicture).expect(200)
+        expect(res.body.content).toEqual(createPicture.content)
     })
-    test('게시글 find', async () => {
+    test('사진 전체 조회', async () => {
         await request(app).post("/users").send(createUser)
         await request(app).post("/users/1/articles").send(createArticle)
-        await request(app).post("/users/1/articles").send(createArticle)
-        
-        const res = await request(app).get("/users/1/articles").expect(200)
+        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
+        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
+
+        const res = await request(app).get("/users/1/articles/1/pictures").send(createPicture).expect(200)
         expect(res.body.length).toEqual(2)
-    })
-    test('해당 유저가 작성한 게시글 전체 삭제', async () => {
-        await request(app).post("/users").send(createUser)
-        await request(app).post("/users/1/articles").send(createArticle)
-        await request(app).post("/users/1/articles").send(createArticle)
-        
-        const res = await request(app).delete("/users/1/articles").expect(200)
-        expect(res.body).toEqual(2)
-    })
-    test('해당 유저가 작성한 게시글 ID 삭제', async () => {
-        await request(app).post("/users").send(createUser)
-        await request(app).post("/users/1/articles").send(createArticle)
-        
-        const res = await request(app).delete("/users/1/articles/1").expect(200)
-        expect(res.body.affected).toEqual(1)
-    })
-    test('해당 유저가 작성한 게시글 수정', async () => {
-        await request(app).post("/users").send(createUser)
-        await request(app).post("/users/1/articles").send(createArticle)
-        const updateContent = {content : "수정"}
-        const res = await request(app).put("/users/1/articles/1").send(updateContent).expect(200)
-        expect(res.body.content).toEqual(updateContent.content)
     })
 })

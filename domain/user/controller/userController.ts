@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserService } from '../service/userService';
 import { ArticleService } from '../../article/service/articleService';
+import { PictureService } from '../../picture/service/pictureService';
 
 const {asyncWrapper} = require('../../../global/error/async');
 const router = require('express').Router();
@@ -65,5 +66,20 @@ router.put('/:user_id/articles/:article_id', asyncWrapper(async(req: Request, re
     return res.status(200).json(article);
 }))
 
+
+// PICTURE-------------------------------------------------------------
+router.post('/:user_id/articles/:article_id/pictures', asyncWrapper(async (req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const article_id = Number(req.params.article_id)
+    const { content } = req.body
+
+    const article = await (new PictureService()).createPicture({ user_id, article_id, content })
+    return res.status(200).json(article)
+}))
+router.get('/:user_id/articles/:article_id/pictures', asyncWrapper(async (req: Request, res: Response) => {
+    const article_id = Number(req.params.article_id)
+    const picture = await (new PictureService()).findPictureByArticleId(article_id)
+    return res.status(200).json(picture);
+}))
 
 module.exports = router;

@@ -1,12 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
 import {Article} from "../../article/domain/article"
 
-@Entity("PICTURE")
+@Entity("picture")
 export class Picture {
   @PrimaryGeneratedColumn()
-    id!: number
+    picture_id!: number
   @Column()
     content?: string
-  @ManyToOne((type) => Article, (article:Article) => article.picture)
-    article?:Article
+  @ManyToOne(() => Article)
+  @JoinColumn({name: 'article_id'})
+  article?: Article
 }
