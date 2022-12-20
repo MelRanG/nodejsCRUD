@@ -60,26 +60,26 @@ export class PictureService{
     //     return await this.articleRepository.findOne(article_id)
     // }
 
-    // async deleteArticleAll(user_id:number) {
-    //     const articles = this.findArticleByUserId(user_id)
-    //     const count = (await articles).length
-    //     for (const article of await articles) { 
-    //         await this.articleRepository.delete(article.article_id)
-    //     }
-    //     return count
-    // }
+    async deletePictureAll(article_id:number) {
+        const pictures = this.findPictureByArticleId(article_id)
+        const count = (await pictures).length
+        for (const picture of await pictures) { 
+            await this.pictureRepository.delete(picture.picture_id)
+        }
+        return count
+    }
 
-    // async deleteArticle(user_id:number, article_id:number) {
-    //     const article = await this.articleRepository.createQueryBuilder('article')
-    //         .delete()
-    //         .from('article')
-    //         .where("article_id = :article_id", { article_id })
-    //         .andWhere("user_id = :user_id", { user_id })
-    //         .execute()
-    //     if (article.affected === 0) {
-    //         throw new BadRequestError("등록된 게시글이 없습니다.")
-    //     }
-    //     return article
-    // }
+    async deletePicture(article_id:number, picture_id:number) {
+        const picture = await this.pictureRepository.createQueryBuilder('picture')
+            .delete()
+            .from('picture')
+            .where("article_id = :article_id", { article_id })
+            .andWhere("picture_id = :picture_id", { picture_id })
+            .execute()
+        if (picture.affected === 0) {
+            throw new BadRequestError("등록된 사진이 없습니다.")
+        }
+        return picture
+    }
 
 }
