@@ -29,10 +29,10 @@ export class ArticleService{
         return await this.articleRepository.find()
     }
 
-    async findByArticleId(article_id:number) {
-        const article = await this.articleRepository.findOne(article_id)
+    async findArticleByUserId(user_id: number) {
+        const article = await this.articleRepository.findOne(user_id, { relations: ['user'] })
         if (article === undefined) {
-            throw new BadRequestError("해당하는 게시글이 없습니다.")
+            throw new BadRequestError("해당 작성자가 작성한 게시글이 없습니다.")
         }
         return article
     }

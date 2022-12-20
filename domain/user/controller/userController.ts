@@ -38,10 +38,11 @@ router.post('/:user_id/articles', asyncWrapper(async (req: Request, res: Respons
     const article = await (new ArticleService()).createArticle({ user_id, content })
     return res.status(200).json(article)
 }))
-// router.get('/:article_id', asyncWrapper(async(req: Request, res: Response) => {
-//     const article = await (new ArticleService()).findByArticleId(req.body)
-//     return res.json(article);
-// }))
+router.get('/:user_id/articles', asyncWrapper(async (req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const article = await (new ArticleService()).findArticleByUserId(user_id)
+    return res.status(200).json(article);
+}))
 
 // router.put('/:id', asyncWrapper(async(req: Request, res: Response) => {
 //     const article_id = Number(req.params.id)

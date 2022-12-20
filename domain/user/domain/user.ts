@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import {Article} from "../../article/domain/article"
 
-@Entity("USER")
+@Entity("user")
 export class User {
   @PrimaryGeneratedColumn()
     user_id!: number

@@ -7,7 +7,6 @@ const ErrorHandlerMiddleware = (err:any, req:Request, res:Response, next:NextFun
 		statusCode: err.statusCode || StatusCode.INTERNAL_SERVER_ERROR,
 		message: err.message || "Internal server error",
 	}
-    console.log("에러핸들러 실행")
 	return res.status(error.statusCode).json({ message: error.message })
 }
 

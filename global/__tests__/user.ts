@@ -22,6 +22,9 @@ beforeEach(async () => {
 const createUser = {
     name : "홍길동"
 }
+const createArticle = {
+    content : "컨텐츠"
+}
 
 describe('user', () => {
     test('유저 create', async () => {
@@ -53,8 +56,14 @@ describe('user', () => {
 describe('content', () => {
     test('게시글 create', async () => {
         await request(app).post("/users").send(createUser)
-        const req = { content:"게시글 본문"}
-        const res = await request(app).post("/users/1/articles").send(req).expect(200)
-        expect(res.body.content).toEqual(req.content)
+        const res = await request(app).post("/users/1/articles").send(createArticle).expect(200)
+        expect(res.body.content).toEqual(createArticle.content)
+    })
+    test('게시글 find', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        
+        const res = await request(app).get("/users/1/articles").expect(200)
+        expect(res.body.content).toEqual(createArticle.content)
     })
 })

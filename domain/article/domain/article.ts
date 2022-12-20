@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { User } from "../../user/domain/user"
 import { Picture } from "../../picture/domain/picture"
 
-@Entity("ARTICLE")
+@Entity("article")
 export class Article {
   @PrimaryGeneratedColumn()
     article_id!: number
