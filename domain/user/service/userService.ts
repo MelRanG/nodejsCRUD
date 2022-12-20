@@ -2,6 +2,7 @@ import { getCustomRepository, Repository } from 'typeorm'
 import { UserRepository } from '../repository/userRepository'
 import { User } from '../domain/user'
 import { userDto } from '../dto/userDto'
+const {BadRequestError} = require('../../../global/error/badReqeust')
 
 
 export class UserService{
@@ -10,12 +11,10 @@ export class UserService{
     constructor() {
         this.userRepository = getCustomRepository(UserRepository)
     }
-
-    async createUser({ userId, name }: userDto) {
+     async createUser({ userId, name }: userDto) {
         const userAlreadyExists = await this.userRepository.findOne({ userId })
         if (userAlreadyExists) {
-            console.log("유저 중복 --> 나중에 예외처리예정")
-            return userAlreadyExists
+           throw new BadRequestError("이미 가입한 회원입니다.")
         }
         const user = this.userRepository.create({ userId, name })
         await this.userRepository.save(user)
@@ -25,7 +24,7 @@ export class UserService{
     async findByUserId(user_id:string) {
         const user = await this.userRepository.findOne(user_id)
         if (user === undefined) {
-            console.log("나중에 예외처리")
+            throw new BadRequestError("가입된 회원이 없습니다.")
         }
         return user
     }
@@ -33,8 +32,7 @@ export class UserService{
     async updateUser({ id, userId, name }: userDto) {
         const user = await this.userRepository.findOne(id)
         if (user === undefined) {
-            console.log("나중에 예외처리")
-            return
+            throw new BadRequestError("가입된 회원이 없습니다.")
         }
         await this.userRepository.update(user.id, {
             "userId": userId,
@@ -46,8 +44,7 @@ export class UserService{
     async deleteUser(id:number) {
         const user = await this.userRepository.delete(id)
         if (user.affected === 0) {
-            console.log("나중에 예외처리")
-            return
+            throw new BadRequestError("가입된 회원이 없습니다.")
         }
         return user
     }

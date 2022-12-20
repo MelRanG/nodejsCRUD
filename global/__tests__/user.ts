@@ -36,8 +36,6 @@ describe('user', () => {
         await request(app).post("/users").send(createUser)
         const res = await request(app).get("/users/id").expect(200)
         expect(res.body.userId).toEqual(createUser.userId)
-
-
         expect(res.body.name).toEqual(createUser.name)
     })
     test('유저 update', async () => { 

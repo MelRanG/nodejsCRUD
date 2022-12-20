@@ -1,31 +1,16 @@
 import express from 'express'
 import "./global/config/dbConfig"
+const ErrorHandlerMiddleware = require('./global/error/errorHandler')
 const app = express();
 
-// const sqlite3 = require('sqlite3').verbose();
 
-// // open database in memory
-// let db = new sqlite3.Database(':memory:', (err:Error) => {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log('Connected to the in-memory SQlite database.');
-// });
-
-// close the database connection
-// db.close((err:Error) => {
-//   if (err) {
-//     return console.error(err.message);
-//   }
-//   console.log('Close the database connection.');
-// });
 app.use(express.json())
-
 const { swaggerUi, specs } = require('./global/config/swaggerConfig')
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 const userController = require('./domain/user/controller/userController');
 
 app.use('/users', userController);
+app.use(ErrorHandlerMiddleware)
 
 app.listen(3000, () => {
     console.log('server start')
