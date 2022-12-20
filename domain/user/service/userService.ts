@@ -11,14 +11,17 @@ export class UserService{
     constructor() {
         this.userRepository = getCustomRepository(UserRepository)
     }
-     async createUser({ userId, name }: userDto) {
-        const userAlreadyExists = await this.userRepository.findOne({ userId })
+     async createUser({ name }: userDto) {
+        const userAlreadyExists = await this.userRepository.findOne({ name })
         if (userAlreadyExists) {
            throw new BadRequestError("이미 가입한 회원입니다.")
         }
-        const user = this.userRepository.create({ userId, name })
+        const user = this.userRepository.create({ name })
         await this.userRepository.save(user)
         return user
+    }
+    async getUserList() {
+        return await this.userRepository.find()
     }
 
     async findByUserId(user_id:string) {
@@ -29,20 +32,19 @@ export class UserService{
         return user
     }
 
-    async updateUser({ id, userId, name }: userDto) {
-        const user = await this.userRepository.findOne(id)
+    async updateUser({ user_id, name }: userDto) {
+        const user = await this.userRepository.findOne(user_id)
         if (user === undefined) {
             throw new BadRequestError("가입된 회원이 없습니다.")
         }
-        await this.userRepository.update(user.id, {
-            "userId": userId,
+        await this.userRepository.update(user.user_id, {
             "name": name
         })
-        return await this.userRepository.findOne(id)
+        return await this.userRepository.findOne(user_id)
     }
 
-    async deleteUser(id:number) {
-        const user = await this.userRepository.delete(id)
+    async deleteUser(user_id:number) {
+        const user = await this.userRepository.delete(user_id)
         if (user.affected === 0) {
             throw new BadRequestError("가입된 회원이 없습니다.")
         }

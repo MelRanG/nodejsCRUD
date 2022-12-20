@@ -1,39 +1,59 @@
 import { Request, Response } from 'express';
 import { UserService } from '../service/userService';
+import { ArticleService } from '../../article/service/articleService';
 
 const {asyncWrapper} = require('../../../global/error/async');
 const router = require('express').Router();
 
-router.get('/:user_id', asyncWrapper(async(req: Request, res: Response) => {
-    const user = await (new UserService()).findByUserId(req.body)
+router.get('/', asyncWrapper(async(req: Request, res: Response) => {
+    const user = await (new UserService()).getUserList()
     return res.json(user);
-
 }))
 router.post('/',  asyncWrapper(async(req: Request, res: Response) => {
     const user = await (new UserService()).createUser(req.body)
     return res.status(200).json(user)
 }))
-// router.post('/',  async function (req: Request, res: Response) {
-//     const user = await (new UserService()).createUser(req.body)
-//     return res.json(user)
-//     // try {
-//     //     const user = await (new UserService()).createUser(req.body)
-//     //     return res.json(user)
-//     // } catch (err:any) {
-//     //     return res.status(400).json({message: err.message})
-//     // }
-// })
-router.put('/:id', asyncWrapper(async(req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const { userId, name } = req.body
-    const user = await (new UserService()).updateUser({ id, userId, name })
+router.get('/:user_id', asyncWrapper(async(req: Request, res: Response) => {
+    const user = await (new UserService()).findByUserId(req.body)
+    return res.json(user);
+}))
+
+router.put('/:user_id', asyncWrapper(async(req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const { name } = req.body
+    const user = await (new UserService()).updateUser({ user_id, name })
     return res.status(200).json(user);
 }))
 
-router.delete('/:id', asyncWrapper(async(req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const user = await (new UserService()).deleteUser(id)
+router.delete('/:user_id', asyncWrapper(async(req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const user = await (new UserService()).deleteUser(user_id)
     return res.json(user);
 }))
+
+// ARTICLES
+router.post('/:user_id/articles', asyncWrapper(async (req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const {content} = req.body
+    const article = await (new ArticleService()).createArticle({ user_id, content })
+    return res.status(200).json(article)
+}))
+// router.get('/:article_id', asyncWrapper(async(req: Request, res: Response) => {
+//     const article = await (new ArticleService()).findByArticleId(req.body)
+//     return res.json(article);
+// }))
+
+// router.put('/:id', asyncWrapper(async(req: Request, res: Response) => {
+//     const article_id = Number(req.params.id)
+//     const { content } = req.body
+//     const article = await (new ArticleService()).updateArticle({ article_id, content })
+//     return res.status(200).json(article);
+// }))
+
+// router.delete('/:id', asyncWrapper(async(req: Request, res: Response) => {
+//     const id = Number(req.params.id)
+//     const article = await (new ArticleService()).deleteArticle(id)
+//     return res.json(article);
+// }))
 
 module.exports = router;

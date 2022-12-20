@@ -20,7 +20,6 @@ beforeEach(async () => {
 })
 
 const createUser = {
-    userId : "gildong",
     name : "홍길동"
 }
 
@@ -29,28 +28,33 @@ describe('user', () => {
         const res = await request(app).post("/users")
             .send(createUser)
             .expect(200)
-        expect(res.body.userId).toEqual(createUser.userId)
         expect(res.body.name).toEqual(createUser.name)
     })
     test('유저 find', async () => { 
         await request(app).post("/users").send(createUser)
         const res = await request(app).get("/users/id").expect(200)
-        expect(res.body.userId).toEqual(createUser.userId)
         expect(res.body.name).toEqual(createUser.name)
     })
     test('유저 update', async () => { 
         const updateUser = {
-            userId : "gil",
             name : "홍"
         }
         await request(app).post("/users").send(createUser)
         const res = await request(app).put("/users/1").send(updateUser).expect(200)
-        expect(res.body.userId).toEqual(updateUser.userId)
         expect(res.body.name).toEqual(updateUser.name)
     })
     test('유저 delete', async () => {
         await request(app).post("/users").send(createUser)
         const res = await request(app).delete("/users/1").expect(200)
         expect(res.body.affected).toEqual(1)
+    })
+})
+
+describe('content', () => {
+    test('게시글 create', async () => {
+        await request(app).post("/users").send(createUser)
+        const req = { content:"게시글 본문"}
+        const res = await request(app).post("/users/1/articles").send(req).expect(200)
+        expect(res.body.content).toEqual(req.content)
     })
 })

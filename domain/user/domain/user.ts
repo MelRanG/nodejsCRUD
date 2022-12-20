@@ -4,9 +4,7 @@ import {Article} from "../../article/domain/article"
 @Entity("USER")
 export class User {
   @PrimaryGeneratedColumn()
-    id!: number
-  @Column()
-    userId?: string
+    user_id!: number
   @Column()
     name?: string
   @OneToMany((type) => Article, (article) => article.user)

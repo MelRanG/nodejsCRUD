@@ -1,5 +1,4 @@
 export interface userDto{
-    id?: number,
-    userId?: string
-    name?:string
+    user_id?: number
+    name?: string
 }
