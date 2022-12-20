@@ -63,4 +63,22 @@ describe('content', () => {
         const res = await request(app).delete("/users/1/articles/1/pictures/1").expect(200)
         expect(res.body.affected).toEqual(1)
     })
+    test('해당 게시글 사진 수정', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
+
+        const updateContent = {content : "수정"}
+        const res = await request(app).put("/users/1/articles/1/pictures/1").send(updateContent).expect(200)
+        expect(res.body.content).toEqual(updateContent.content)
+    })
+
+    test('해당 사진 조회', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
+
+        const res = await request(app).get("/users/1/articles/1/pictures/1").expect(200)
+        expect(res.body.content).toEqual(createPicture.content)
+    })
 })

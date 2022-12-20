@@ -92,5 +92,19 @@ router.delete('/:user_id/articles/:article_id/pictures/:picture_id', asyncWrappe
     const picture = await (new PictureService()).deletePicture(article_id, picture_id)
     return res.json(picture);
 }))
+router.put('/:user_id/articles/:article_id/pictures/:picture_id', asyncWrapper(async(req: Request, res: Response) => {
+    const article_id = Number(req.params.article_id)
+    const picture_id = Number(req.params.picture_id)
+    const { content } = req.body
+
+    const picture = await (new PictureService()).updatePicture({ article_id, picture_id, content })
+    return res.status(200).json(picture);
+}))
+router.get('/:user_id/articles/:article_id/pictures/:picture_id', asyncWrapper(async (req: Request, res: Response) => {
+    const article_id = Number(req.params.article_id)
+    const picture_id = Number(req.params.picture_id)
+    const picture = await (new PictureService()).findByPictureId(article_id, picture_id)
+    return res.status(200).json(picture);
+}))
 
 module.exports = router;
