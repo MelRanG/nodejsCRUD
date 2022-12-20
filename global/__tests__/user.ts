@@ -26,16 +26,26 @@ const createUser = {
 
 describe('user', () => {
     test('유저 create', async () => {
-        const resPost = await request(app).post("/users")
+        const res = await request(app).post("/users")
             .send(createUser)
             .expect(200)
-        expect(resPost.body.userId).toEqual(createUser.userId)
-        expect(resPost.body.name).toEqual(createUser.name)
+        expect(res.body.userId).toEqual(createUser.userId)
+        expect(res.body.name).toEqual(createUser.name)
     })
     test('유저 find', async () => { 
         await request(app).post("/users").send(createUser)
-        const resGet = await request(app).get("/users/id")
-        expect(resGet.body.userId).toEqual(createUser.userId)
-        expect(resGet.body.name).toEqual(createUser.name)
+        const res = await request(app).get("/users/id")
+        expect(res.body.userId).toEqual(createUser.userId)
+        expect(res.body.name).toEqual(createUser.name)
+    })
+    test('유저 update', async () => { 
+        const updateUser = {
+            userId : "gil",
+            name : "홍"
+        }
+        await request(app).post("/users").send(createUser)
+        const res = await request(app).put("/users/1").send(updateUser)
+        expect(res.body.userId).toEqual(updateUser.userId)
+        expect(res.body.name).toEqual(updateUser.name)
     })
 })

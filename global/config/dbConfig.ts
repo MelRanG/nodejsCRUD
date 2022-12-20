@@ -26,7 +26,8 @@ const clear = async () => {
 
   entities.forEach(async (entity) => {
     const repository = connection.getRepository(entity.name)
-    await repository.query(`DELETE FROM ${entity.tableName}`)
+      await repository.query(`DELETE FROM ${entity.tableName}`)
+      await repository.query(`UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='${entity.tableName}'`);
   })
 }
 
