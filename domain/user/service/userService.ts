@@ -42,4 +42,13 @@ export class UserService{
         })
         return await this.userRepository.findOne(id)
     }
+
+    async deleteUser(id:number) {
+        const user = await this.userRepository.delete(id)
+        if (user.affected === 0) {
+            console.log("나중에 예외처리")
+            return
+        }
+        return user
+    }
 }

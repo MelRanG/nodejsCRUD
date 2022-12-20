@@ -31,10 +31,10 @@ router.put('/:id', async function (req: Request, res: Response) {
         return res.status(400).json({message: err.message})
     }
 })
-router.delete('/:user_id', async function (req: Request, res: Response){
+router.delete('/:id', async function (req: Request, res: Response){
+    const id = Number(req.params.id)
     try {
-        console.log(req.params)
-        const user = await (new UserService()).findByUserId(req.body)
+        const user = await (new UserService()).deleteUser(id)
         return res.json(user);
     } catch (err: any) {
         return res.status(400).json({message: err.message})
