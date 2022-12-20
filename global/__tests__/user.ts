@@ -63,22 +63,3 @@ describe('user', () => {
         expect(res.body.affected).toEqual(1)
     })
 })
-
-describe('content', () => {
-    test('사진 create', async () => {
-        await request(app).post("/users").send(createUser)
-        await request(app).post("/users/1/articles").send(createArticle)
-
-        const res = await request(app).post("/users/1/articles/1/pictures").send(createPicture).expect(200)
-        expect(res.body.content).toEqual(createPicture.content)
-    })
-    test('사진 전체 조회', async () => {
-        await request(app).post("/users").send(createUser)
-        await request(app).post("/users/1/articles").send(createArticle)
-        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
-        await request(app).post("/users/1/articles/1/pictures").send(createPicture)
-
-        const res = await request(app).get("/users/1/articles/1/pictures").send(createPicture).expect(200)
-        expect(res.body.length).toEqual(2)
-    })
-})
