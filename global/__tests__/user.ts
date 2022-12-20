@@ -75,4 +75,11 @@ describe('content', () => {
         const res = await request(app).delete("/users/1/articles").expect(200)
         expect(res.body).toEqual(2)
     })
+    test('해당 유저가 작성한 게시글 ID 삭제', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        
+        const res = await request(app).delete("/users/1/articles/1").expect(200)
+        expect(res.body.affected).toEqual(1)
+    })
 })

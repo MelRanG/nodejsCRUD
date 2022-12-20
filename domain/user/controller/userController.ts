@@ -48,6 +48,12 @@ router.delete('/:user_id/articles', asyncWrapper(async(req: Request, res: Respon
     const article = await (new ArticleService()).deleteArticleAll(user_id)
     return res.json(article);
 }))
+router.delete('/:user_id/articles/:article_id', asyncWrapper(async(req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const article_id = Number(req.params.article_id)
+    const article = await (new ArticleService()).deleteArticle(user_id, article_id)
+    return res.json(article);
+}))
 // router.put('/:id', asyncWrapper(async(req: Request, res: Response) => {
 //     const article_id = Number(req.params.id)
 //     const { content } = req.body

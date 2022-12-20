@@ -58,8 +58,13 @@ export class ArticleService{
         return count
     }
 
-    async deleteArticle(id:number) {
-        const article = await this.articleRepository.delete(id)
+    async deleteArticle(user_id:number, article_id:number) {
+        const article = await this.articleRepository.createQueryBuilder('article')
+            .delete()
+            .from('article')
+            .where("article_id = :article_id", { article_id })
+            .andWhere("user_id = :user_id", { user_id })
+            .execute()
         if (article.affected === 0) {
             throw new BadRequestError("등록된 게시글이 없습니다.")
         }
