@@ -20,16 +20,22 @@ beforeEach(async () => {
 })
 
 const createUser = {
-    userId : "id",
+    userId : "gildong",
     name : "홍길동"
 }
 
 describe('user', () => {
-    test('상태코드 200 리턴 & 값 삽입', async () => {
+    test('유저 create', async () => {
         const resPost = await request(app).post("/users")
             .send(createUser)
             .expect(200)
         expect(resPost.body.userId).toEqual(createUser.userId)
         expect(resPost.body.name).toEqual(createUser.name)
+    })
+    test('유저 find', async () => { 
+        await request(app).post("/users").send(createUser)
+        const resGet = await request(app).get("/users/id")
+        expect(resGet.body.userId).toEqual(createUser.userId)
+        expect(resGet.body.name).toEqual(createUser.name)
     })
 })

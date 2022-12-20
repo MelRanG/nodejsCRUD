@@ -12,7 +12,6 @@ export class UserService{
     }
 
     async create({ userId, name }: userDto) {
-        console.log(userId, name)
         const userAlreadyExists = await this.userRepository.findOne({ userId })
         if (userAlreadyExists) {
             console.log("유저 중복 --> 나중에 예외처리예정")
@@ -20,6 +19,14 @@ export class UserService{
         }
         const user = this.userRepository.create({ userId, name })
         await this.userRepository.save(user)
+        return user
+    }
+
+    async findByUserId(user_id:string) {
+        const user = await this.userRepository.findOne(user_id)
+        if (user === undefined) {
+            console.log("나중에 예외처리")
+        }
         return user
     }
 }

@@ -1,6 +1,4 @@
-import { Article } from "../../article/domain/article"
-
-export class userDto{
+export interface userDto{
     userId?: string
     name?:string
 }
