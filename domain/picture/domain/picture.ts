@@ -7,7 +7,7 @@ export class Picture {
     picture_id!: number
   @Column()
     content?: string
-  @ManyToOne(() => Article)
+  @ManyToOne(() => Article, {onDelete: "CASCADE"})
   @JoinColumn({name: 'article_id'})
   article?: Article
 }

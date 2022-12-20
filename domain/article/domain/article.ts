@@ -8,7 +8,7 @@ export class Article {
     article_id!: number
   @Column()
     content?: string
-    @ManyToOne(() => User)
+    @ManyToOne(() => User,{onDelete: "CASCADE"})
     @JoinColumn({name: 'user_id'})
     user!:User
   @OneToMany((type) => Picture, (picture) => picture.article)

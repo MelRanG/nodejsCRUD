@@ -16,7 +16,7 @@ afterAll(async ()=>{
 })
 
 afterEach(async () => {
-    await clear()
+    clear()
 })
 
 const createUser = {
