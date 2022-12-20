@@ -30,7 +30,9 @@ export class ArticleService{
     }
 
     async findArticleByUserId(user_id: number) {
-        const article = await this.articleRepository.findOne(user_id, { relations: ['user'] })
+        const article = await this.articleRepository.createQueryBuilder("article")
+            .where("user_id = :user_id", { user_id })
+            .getMany()
         if (article === undefined) {
             throw new BadRequestError("해당 작성자가 작성한 게시글이 없습니다.")
         }
@@ -46,6 +48,14 @@ export class ArticleService{
             "content": content,
         })
         return await this.articleRepository.findOne(article_id)
+    }
+    async deleteArticleAll(user_id:number) {
+        const articles = this.findArticleByUserId(user_id)
+        const count = (await articles).length
+        for (const article of await articles) { 
+            await this.articleRepository.delete(article.article_id)
+        }
+        return count
     }
 
     async deleteArticle(id:number) {

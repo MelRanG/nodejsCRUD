@@ -62,8 +62,17 @@ describe('content', () => {
     test('게시글 find', async () => {
         await request(app).post("/users").send(createUser)
         await request(app).post("/users/1/articles").send(createArticle)
+        await request(app).post("/users/1/articles").send(createArticle)
         
         const res = await request(app).get("/users/1/articles").expect(200)
-        expect(res.body.content).toEqual(createArticle.content)
+        expect(res.body.length).toEqual(2)
+    })
+    test('해당 유저가 작성한 게시글 전체 삭제', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        await request(app).post("/users/1/articles").send(createArticle)
+        
+        const res = await request(app).delete("/users/1/articles").expect(200)
+        expect(res.body).toEqual(2)
     })
 })

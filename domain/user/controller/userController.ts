@@ -43,7 +43,11 @@ router.get('/:user_id/articles', asyncWrapper(async (req: Request, res: Response
     const article = await (new ArticleService()).findArticleByUserId(user_id)
     return res.status(200).json(article);
 }))
-
+router.delete('/:user_id/articles', asyncWrapper(async(req: Request, res: Response) => {
+    const user_id = Number(req.params.user_id)
+    const article = await (new ArticleService()).deleteArticleAll(user_id)
+    return res.json(article);
+}))
 // router.put('/:id', asyncWrapper(async(req: Request, res: Response) => {
 //     const article_id = Number(req.params.id)
 //     const { content } = req.body
@@ -51,10 +55,5 @@ router.get('/:user_id/articles', asyncWrapper(async (req: Request, res: Response
 //     return res.status(200).json(article);
 // }))
 
-// router.delete('/:id', asyncWrapper(async(req: Request, res: Response) => {
-//     const id = Number(req.params.id)
-//     const article = await (new ArticleService()).deleteArticle(id)
-//     return res.json(article);
-// }))
 
 module.exports = router;
