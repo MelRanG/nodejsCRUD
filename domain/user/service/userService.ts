@@ -24,7 +24,7 @@ export class UserService{
         return await this.userRepository.find()
     }
 
-    async findByUserId(user_id:string) {
+    async findByUserId(user_id: number) {
         const user = await this.userRepository.findOne(user_id)
         if (user === undefined) {
             throw new BadRequestError("가입된 회원이 없습니다.")

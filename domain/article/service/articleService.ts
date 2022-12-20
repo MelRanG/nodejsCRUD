@@ -25,9 +25,6 @@ export class ArticleService{
         await this.articleRepository.save(article)
         return article
     }
-    async getArticleList() {
-        return await this.articleRepository.find()
-    }
 
     async findArticleByUserId(user_id: number) {
         const article = await this.articleRepository.createQueryBuilder("article")
@@ -39,16 +36,21 @@ export class ArticleService{
         return article
     }
 
-    async updateArticle({article_id, content }: articleDto) {
-        const article = await this.articleRepository.findOne(article_id)
+    async updateArticle({user_id, article_id, content }: articleDto) {
+        const article = await this.articleRepository.createQueryBuilder('article')
+            .where("article_id = :article_id", { article_id })
+            .andWhere("user_id = :user_id", { user_id })
+            .getOne()
         if (article === undefined) {
             throw new BadRequestError("등록된 게시글이 없습니다.")
         }
-        await this.articleRepository.update(article.article_id, {
+        const result = await this.articleRepository.update(article.article_id, {
             "content": content,
+            "user" : article.user
         })
         return await this.articleRepository.findOne(article_id)
     }
+
     async deleteArticleAll(user_id:number) {
         const articles = this.findArticleByUserId(user_id)
         const count = (await articles).length

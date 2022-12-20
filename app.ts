@@ -8,10 +8,8 @@ app.use(express.json())
 const { swaggerUi, specs } = require('./global/config/swaggerConfig')
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 const userController = require('./domain/user/controller/userController');
-const articleController = require('./domain/article/controller/articleController');
 
 app.use('/users', userController);
-app.use('/articles', articleController);
 app.use(ErrorHandlerMiddleware)
 
 app.listen(3000, () => {

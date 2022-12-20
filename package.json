@@ -6,7 +6,8 @@
     "start": "node dist/app.js",
     "dev": "nodemon app.ts",
     "build": "tsc-p",
-    "test": "jest"
+    "test": "jest",
+    "coverage" : "jest --coverage"
   },
   "dependencies": {
     "@types/express": "^4.17.15",

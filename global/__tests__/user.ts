@@ -33,9 +33,17 @@ describe('user', () => {
             .expect(200)
         expect(res.body.name).toEqual(createUser.name)
     })
+    test('유저 전체 조회', async () => { 
+        await request(app).post("/users").send(createUser)
+        const createUser2 = {name : "김길동"}
+        await request(app).post("/users").send(createUser2)
+
+        const res = await request(app).get("/users").expect(200)
+        expect(res.body.length).toEqual(2)
+    })    
     test('유저 find', async () => { 
         await request(app).post("/users").send(createUser)
-        const res = await request(app).get("/users/id").expect(200)
+        const res = await request(app).get("/users/1").expect(200)
         expect(res.body.name).toEqual(createUser.name)
     })
     test('유저 update', async () => { 
@@ -81,5 +89,12 @@ describe('content', () => {
         
         const res = await request(app).delete("/users/1/articles/1").expect(200)
         expect(res.body.affected).toEqual(1)
+    })
+    test('해당 유저가 작성한 게시글 수정', async () => {
+        await request(app).post("/users").send(createUser)
+        await request(app).post("/users/1/articles").send(createArticle)
+        const updateContent = {content : "수정"}
+        const res = await request(app).put("/users/1/articles/1").send(updateContent).expect(200)
+        expect(res.body.content).toEqual(updateContent.content)
     })
 })
