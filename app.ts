@@ -5,8 +5,6 @@ const app = express();
 
 
 app.use(express.json())
-const { swaggerUi, specs } = require('./global/config/swaggerConfig')
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs))
 const userController = require('./domain/user/controller/userController');
 
 app.use('/users', userController);
